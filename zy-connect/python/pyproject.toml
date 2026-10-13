@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zhiyan-connect-local"
+version = "1.0.0"
+description = "Local-only ZY-Connect client for producer tools"
+requires-python = ">=3.9"
+
+[tool.setuptools]
+py-modules = ["zy_connect"]
