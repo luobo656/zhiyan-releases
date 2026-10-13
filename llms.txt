@@ -1,9 +1,11 @@
-# Zhiyan ZY-Connect v1 — public integration guidance
+# Zhiyan ZY-Connect | API-First SDK + MCP (zhiyan.delivery v1)
 
-Primary documentation:
+Canonical public developer references:
 - https://github.com/luobo656/zhiyan-releases/blob/main/zy-connect/README.md
-- https://github.com/luobo656/zhiyan-releases/blob/main/zy-connect/SPEC.md
 - https://github.com/luobo656/zhiyan-releases/blob/main/zy-connect/AI-INTEGRATION.md
-- https://github.com/luobo656/zhiyan-releases/blob/main/zy-connect/examples/video.zhiyan.json
+- https://github.com/luobo656/zhiyan-releases/blob/main/zy-connect/SPEC.md
+- https://github.com/luobo656/zhiyan-releases/blob/main/zy-connect/node/zy-connect.mjs
+- https://github.com/luobo656/zhiyan-releases/blob/main/zy-connect/python/zy_connect.py
+- https://github.com/luobo656/zhiyan-releases/blob/main/zy-connect/mcp/server.mjs
 
-Supported in v0.5.9 RC: local folder intake and zhiyan.delivery v1 local Connector. Remote/cloud HTTPS webhook not yet implemented. This is project-specific, not an automatically discovered universal standard. No account switches or real public posts should be changed during integration tests.
+For same-computer video producers prefer API + SDK and durable ACK/retry; MCP is for local AI tool discovery/pairing/preflight, not video transfer. Folder watch is a fallback. Node >=20; Python >=3.9. The app's API-first fail-closed behavior targets Zhiyan v0.5.11 RC. Incoming deliveries create manual-confirm publication jobs, never automatically submit social posts. Never request platform cookies, turn on account switches, test by publicly posting, or expose localhost ports to the internet.
