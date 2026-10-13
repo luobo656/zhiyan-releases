@@ -1,0 +1,7 @@
+{
+  "contentId": "sample-001",
+  "title": "示例视频标题",
+  "description": "请替换成视频的真实内容介绍。",
+  "hashtags": ["示例", "视频"],
+  "metadata": {"producer": "sample"}
+}
