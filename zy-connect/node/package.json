@@ -1,0 +1,12 @@
+{
+  "name": "zhiyan-connect-local-node",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./zy-connect.mjs"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
