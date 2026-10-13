@@ -1,14 +1,16 @@
-# Instructions for Codex / Claude Code / other coding AIs
+# 纸燕 ZY-Connect：给任何编码 AI 的通用接入任务
 
-You are integrating an *existing content-production application* with **Zhiyan ZY-Connect v1**. Read [SPEC.md](./SPEC.md) and [README.md](./README.md) first. Discover the application's actual video export completion event, output directory, and metadata/cover sources. **Do not assume Zhiyan is a globally-known industry protocol**: use these exact public references as the specification.
+目标：在**当前内容生产工具的源码**中加入纸燕本机 API 交付能力，让用户只需完成一次纸燕配对，以后每次生产成功都能可靠交付作品。不重写纸燕，不默认采用文件夹扫描。
 
-Select the least-invasive approach:
-1. **No-code**: If videos already land in a user-selected output folder, recommend that the user connect it from Zhiyan's GUI. Do not modify source code unless structured metadata is required.
-2. **Sidecar metadata**: After a successful and fully closed video export, atomically write a same-stem `.zhiyan.json` in the same folder, providing real title/description/hashtags/cover paths. Do not guess descriptions or misstate content. Keep a stable `contentId` for retries. Do not alter the user's output media or move files.
-3. **Native Connector**: Only if app needs precise delivery acknowledgements or advanced workflow, use the existing `zhiyan.delivery` v1 implementation or contract discovery; use local pairing and existing retry/outbox. Never build separate social-login or posting automation.
+1. 阅读同目录 README.md 和 SPEC.md，实际检查当前项目 Node/Python/其他语言的版本、作品导出成功事件、视频输出位置、真实标题/描述/话题及封面来源。
+2. 优先集成 node/zy-connect.mjs 或 python/zy_connect.py。如果不是 Node/Python，请对照 GET http://127.0.0.1:17351/v1/delivery-contract 现有协议封装一个同等可靠的 SDK；不得跳过配对、幂等、Outbox 和重试。不要要求用户手动粘贴生产者密钥。
+3. 视频输出完成、文件关闭后，调用 deliver({contentId,videoPath,title,description,hashtags,...})。稳定的 contentId 是唯一任务 ID，遇到断网/重启不能更换。启动时启动 SDK 自动补发循环，并处理 acknowledged、pending、blocked 状态。
+4. 首次由用户在纸燕中创建「API 直连」并选好授权视频输出目录和接收账号，纸燕在授权目录的 .zhiyan/pairing.json 生成仅本机的短时配对凭据。SDK 自动兑换。凭据过期请让用户从纸燕重新准备，不应在代码、日志和聊天里暴露凭据。
+5. 如果当前 AI 支持 MCP，可配置 mcp/server.mjs 作为本地 stdio MCP 服务器，调用 zy_contract/zy_status/zy_preview 查看接入情况，首次 zy_pair(confirm=true) 仅在用户明确批准配对后调用。MCP 不替代媒体交付接口，也不替代社交平台授权。
+6. 保证真实 API 投递只会在纸燕创建 manual_confirm 待审核任务，不得修改账号开关，不得在测试中上传真实视频、访问平台发布页面、恢复暂停的平台或触发远端帖子。
+7. 先在隔离测试网关（独立端口、数据库、输出目录）验收中文路径、首次配对、收到 202 ACK 和 Delivery ID、相同 contentId 的幂等、断网失败重试、重启补发、已停用凭据、越权文件路径。不要在生产环境发送模拟视频。
+8. 如果用户已经使用文件夹监控，**完成 SDK 离线测试后**指导用户明确点击纸燕「将选中连接切换为 API」，让旧文件夹监视停止。没有源码或不能修改的生产工具才继续使用文件夹兜底。
 
-**Important guardrails:** Preserve existing behavior and data; do not collect tokens, cookies or social passwords in output; do not modify or enable any publishing switch; do not open browsers or submit real posts to test; do not circumvent suspended platform automation. Cloud producers cannot access another PC's loopback endpoint or disk. Do not expose `127.0.0.1:17351` to the internet. Ask for permission before changes that post publicly or broaden access.
+验收完成应输出：已修改文件、调用位置、SDK 与 MCP 配置、配对/ACK/离线重试测试结果、未进行远端发布的证明，以及用户后续需要的最少点击步骤。不要把媒体已被纸燕接收误报为已在抖音等平台发布。
 
-Validation: use temp directories, a dummy video, representative metadata, slow/incomplete exports, duplicate `contentId`, restart conditions and invalid paths. Report what was tested and what remains unverified. Completion means **received in Zhiyan**, not **published on Douyin**.
-
-Deliver the smallest clear change and a simple instruction to the user: generate one NEW video after Zhiyan displays its folder as monitored and check the intake list.
+远端/云端生产工具不在本版支持范围；不要让云服务器访问本地回环地址或直接引用其他主机的磁盘路径，不得把纸燕 17351 端口暴露到公网。
