@@ -1,0 +1,9 @@
+# Zhiyan ZY-Connect v1 — public integration guidance
+
+Primary documentation:
+- https://github.com/luobo656/zhiyan-releases/blob/main/zy-connect/README.md
+- https://github.com/luobo656/zhiyan-releases/blob/main/zy-connect/SPEC.md
+- https://github.com/luobo656/zhiyan-releases/blob/main/zy-connect/AI-INTEGRATION.md
+- https://github.com/luobo656/zhiyan-releases/blob/main/zy-connect/examples/video.zhiyan.json
+
+Supported in v0.5.9 RC: local folder intake and zhiyan.delivery v1 local Connector. Remote/cloud HTTPS webhook not yet implemented. This is project-specific, not an automatically discovered universal standard. No account switches or real public posts should be changed during integration tests.
