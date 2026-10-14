@@ -82,3 +82,4 @@ console.log(receipt.state, receipt.deliveryId);
 - **测试**：`npm test` 仅执行 `test/*.test.js`（避免 runtime 历史脚本误加入）；`npm run check`；`node scripts/qa/zy-connect-v2-ui-smoke.mjs` 在临时独立目录和动态端口跑 Edge，不用正式登录账号、视频或生产数据库。
 
 正式机升级前须完成可恢复备份、临时运行环境/端口隔离验收，确认新版本再有明确用户指示切换。
+**v0.6.0 首次升级旧数据库**：以前仅用于测试的 v1 Connector/文件夹连接会一次性撤销授权并从连接列表移除；旧视频、媒体索引、已有发布任务、账号设置及历史交付记录不会删除。请在正式升级前备份数据库。
